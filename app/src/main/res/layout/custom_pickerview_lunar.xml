@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="95dp"
+        android:background="@drawable/bg_rt12_fef3e4"
+        android:paddingTop="24dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:text="取消"
+            android:textColor="#666666"
+            android:textSize="14sp"
+            android:layout_marginStart="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/llTab"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/llTab" />
+
+        <LinearLayout
+            android:id="@+id/llTab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_r4_bor_fdd96b"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tvCalendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_title_selector"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="5dp"
+                android:text="公历"
+                android:textColor="#222222"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvLunar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_title_selector"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="5dp"
+                android:text="农历"
+                android:textColor="#222222"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_finish"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:text="确定"
+            android:textColor="#222222"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/llTab"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/llTab" />
+
+        <!--此部分需要完整复制过去，删减或者更改ID会导致初始化找不到内容而报空-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_r8_white"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintTop_toTopOf="@+id/llWheelView"
+            app:layout_constraintBottom_toBottomOf="@+id/llWheelView"/>
+        <LinearLayout
+            android:id="@+id/llWheelView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llTab">
+            
+            <LinearLayout
+                android:id="@+id/timepicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:minHeight="150dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llTab">
+
+                <com.contrarywind.view.WheelView
+                    android:id="@+id/year"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    app:wheelview_gravity="right"
+                    app:wheelview_textSize="14sp"
+                    app:wheelview_textColorOut="#999999"
+                    app:wheelview_textColorCenter="#333333"/>
+
+                <com.contrarywind.view.WheelView
+                    android:id="@+id/month"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:wheelview_textSize="14sp"/>
+
+                <com.contrarywind.view.WheelView
+                    android:id="@+id/day"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="25dp"
+                    android:layout_weight="1.1"
+                    app:wheelview_gravity="left"
+                    app:wheelview_textSize="14sp"/>
+
+                <com.contrarywind.view.WheelView
+                    android:id="@+id/hour"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.1"
+                    android:visibility="gone"
+                    app:wheelview_textSize="14sp"/>
+
+                <com.contrarywind.view.WheelView
+                    android:id="@+id/min"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.1"
+                    android:visibility="gone"
+                    app:wheelview_textSize="14sp"/>
+
+                <com.contrarywind.view.WheelView
+                    android:id="@+id/second"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.1"
+                    android:visibility="gone"
+                    app:wheelview_textSize="14sp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_bear_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
