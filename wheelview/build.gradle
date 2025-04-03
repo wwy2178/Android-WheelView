@@ -24,24 +24,6 @@ android {
     }
 }
 
-//allprojects {
-//    tasks.withType(Javadoc) {//兼容中文字符
-//        options{
-//            encoding "UTF-8"
-//            charSet 'UTF-8'
-//            links "http://docs.oracle.com/javase/7/docs/api"
-//        }
-//    }
-//}
-//publish {
-//    userOrg = 'contrarywind'//bintray.com 用户名/组织名 user/org name
-//    groupId = 'com.contrarywind'//JCenter上显示的路径 path
-//    artifactId = 'wheelview'//项目名称 project name
-//    publishVersion = '4.1.0'//版本号 version code
-//    desc = 'this is a wheelview for android'//项目描述 description
-//    website = 'https://github.com/Bigkoo/Android-PickerView' //项目网址链接 link
-//}
-
 afterEvaluate {
     publishing {
         publications {
@@ -51,7 +33,7 @@ afterEvaluate {
                 // 配置 Maven 坐标（对应 com.github.wwy2178:AndroidPickerView:v1.0.0）
                 groupId = 'com.github.wwy2178'  // 替换为你的 GitHub 用户名
                 artifactId = 'wheelview'      // 模块名称（如 wheelview）
-                version = '1.0.2'                   // 版本号
+                version = '1.0.3'                   // 版本号
             }
         }
     }
