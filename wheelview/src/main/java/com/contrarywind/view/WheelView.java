@@ -132,6 +132,7 @@ public class WheelView extends View {
     private int drawOutContentStart = 0;//非中间文字开始绘制位置
     private static final float SCALE_CONTENT = 0.8F;//非中间文字则用此控制高度，压扁形成3d错觉
     private float CENTER_CONTENT_OFFSET;//偏移量
+    private float centerOffsetY = 0;
 
     private boolean isAlphaGradient = false; //透明度渐变
 
@@ -170,6 +171,7 @@ public class WheelView extends View {
             textSize = a.getDimensionPixelOffset(R.styleable.pickerview_wheelview_textSize, textSize);
             textOutSize = a.getDimensionPixelOffset(R.styleable.pickerview_wheelview_textOutSize, textOutSize);
             lineSpacingMultiplier = a.getFloat(R.styleable.pickerview_wheelview_lineSpacingMultiplier, lineSpacingMultiplier);
+            centerOffsetY = a.getDimensionPixelSize(R.styleable.pickerview_wheelview_centerOffsetY, 0);
             a.recycle();//回收内存
         }
 
@@ -576,7 +578,7 @@ public class WheelView extends View {
                     // canvas.clipRect(0, 0, measuredWidth, maxTextHeight);
                     //让文字居中
                     float Y = maxTextHeight - CENTER_CONTENT_OFFSET;//因为圆弧角换算的向下取值，导致角度稍微有点偏差，加上画笔的基线会偏上，因此需要偏移量修正一下
-                    canvas.drawText(contentText, drawCenterContentStart, Y, paintCenterText);
+                    canvas.drawText(contentText, drawCenterContentStart, Y - centerOffsetY, paintCenterText);
                     //设置选中项
                     selectedItem = preCurrentIndex - (itemsVisible / 2 - counter);
                 } else {
@@ -849,6 +851,11 @@ public class WheelView extends View {
         if (textXOffset != 0) {
             paintCenterText.setTextScaleX(1.0f);
         }
+    }
+
+    public void setCenterTextYOffset(int centerTextYOffset) {
+        this.centerOffsetY = centerTextYOffset;
+        invalidate();
     }
 
     public void setDividerWidth(int dividerWidth) {

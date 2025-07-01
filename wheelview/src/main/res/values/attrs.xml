@@ -14,5 +14,6 @@
         <attr name="wheelview_dividerWidth" format="dimension"/>
         <attr name="wheelview_dividerLength" format="dimension"/>
         <attr name="wheelview_lineSpacingMultiplier" format="float"/>
+        <attr name="wheelview_centerOffsetY" format="dimension"/>
     </declare-styleable>
 </resources>
