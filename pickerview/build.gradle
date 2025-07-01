@@ -45,5 +45,5 @@ dependencies {
 //    api 'com.contrarywind:wheelview:4.1.0'
     implementation 'androidx.annotation:annotation:1.3.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.10"
-    api 'com.github.wwy2178:Android-PickerView:v1.0.2'
+    api 'com.github.wwy2178:Android-WheelView:1.0.4'
 }
