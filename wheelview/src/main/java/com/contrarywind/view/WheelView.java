@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -44,7 +45,7 @@ public class WheelView extends View {
     }
 
     public enum DividerType { // 分隔线类型
-        FILL, WRAP, CIRCLE
+        FILL, WRAP, CIRCLE,CUSTOM
     }
 
     private static final String[] TIME_NUM = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09"};
@@ -73,6 +74,7 @@ public class WheelView extends View {
 
     private String label;//附加单位
     private int textSize;//选项的文字大小
+    private int textOutSize;
     private int maxTextWidth;
     private int maxTextHeight;
     private int textXOffset;
@@ -85,6 +87,7 @@ public class WheelView extends View {
     private int textColorCenter;
     private int dividerColor;
     private int dividerWidth;
+    private int dividerLength;
 
     // 条目间距倍数
     private float lineSpacingMultiplier = 1.6F;
@@ -141,6 +144,7 @@ public class WheelView extends View {
         calendar = Calendar.getInstance();
         format = new SimpleDateFormat("EEEE", Locale.CHINA);
         textSize = getResources().getDimensionPixelSize(R.dimen.pickerview_textsize);//默认大小
+        textOutSize = getResources().getDimensionPixelSize(R.dimen.pickerview_textsize);
 
         DisplayMetrics dm = getResources().getDisplayMetrics();
         float density = dm.density; // 屏幕密度比（0.75/1.0/1.5/2.0/3.0）
@@ -162,7 +166,9 @@ public class WheelView extends View {
             textColorCenter = a.getColor(R.styleable.pickerview_wheelview_textColorCenter, 0xFF2a2a2a);
             dividerColor = a.getColor(R.styleable.pickerview_wheelview_dividerColor, 0xFFd5d5d5);
             dividerWidth = a.getDimensionPixelSize(R.styleable.pickerview_wheelview_dividerWidth, 2);
+            dividerLength = a.getDimensionPixelSize(R.styleable.pickerview_wheelview_dividerLength, 0);
             textSize = a.getDimensionPixelOffset(R.styleable.pickerview_wheelview_textSize, textSize);
+            textOutSize = a.getDimensionPixelOffset(R.styleable.pickerview_wheelview_textOutSize, textOutSize);
             lineSpacingMultiplier = a.getFloat(R.styleable.pickerview_wheelview_lineSpacingMultiplier, lineSpacingMultiplier);
             a.recycle();//回收内存
         }
@@ -199,7 +205,7 @@ public class WheelView extends View {
         paintOuterText.setColor(textColorOut);
         paintOuterText.setAntiAlias(true);
         paintOuterText.setTypeface(typeface);
-        paintOuterText.setTextSize(textSize);
+        paintOuterText.setTextSize(textOutSize);
 
         paintCenterText = new Paint();
         paintCenterText.setColor(textColorCenter);
@@ -229,7 +235,8 @@ public class WheelView extends View {
         //求出半径
         radius = (int) (halfCircumference / Math.PI);
         //控件宽度，这里支持weight
-        measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
+        Log.d("DDDDDDDD", "reMeasure---> dividerLength:"+dividerLength + " , "+MeasureSpec.getSize(widthMeasureSpec));
+        measuredWidth = dividerLength>0?dividerLength:MeasureSpec.getSize(widthMeasureSpec);
         //计算两条横线 和 选中项画笔的基线Y位置
         firstLineY = (measuredHeight - itemHeight) / 2.0F;
         secondLineY = (measuredHeight + itemHeight) / 2.0F;
@@ -310,8 +317,16 @@ public class WheelView extends View {
     public final void setTextSize(float size) {
         if (size > 0.0F) {
             textSize = (int) (context.getResources().getDisplayMetrics().density * size);
-            paintOuterText.setTextSize(textSize);
+//            paintOuterText.setTextSize(textSize);
             paintCenterText.setTextSize(textSize);
+        }
+    }
+
+    public final void setTextOutSize(float size) {
+        if (size > 0.0F) {
+            textOutSize = (int) (context.getResources().getDisplayMetrics().density * size);
+            paintOuterText.setTextSize(textOutSize);
+//            paintCenterText.setTextSize(textSize);
         }
     }
 
@@ -444,7 +459,11 @@ public class WheelView extends View {
             //半径始终以宽高中最大的来算
             float radius = Math.max((endX - startX), itemHeight) / 1.8f;
             canvas.drawCircle(measuredWidth / 2f, measuredHeight / 2f, radius, paintIndicator);
-        } else {
+        }else if (dividerType == DividerType.CUSTOM && dividerLength > 0){
+            // 自定义长度
+            canvas.drawLine(0.0F, firstLineY, dividerLength, firstLineY, paintIndicator);
+            canvas.drawLine(0.0F, secondLineY, dividerLength, secondLineY, paintIndicator);
+        }else {
             canvas.drawLine(0.0F, firstLineY, measuredWidth, firstLineY, paintIndicator);
             canvas.drawLine(0.0F, secondLineY, measuredWidth, secondLineY, paintIndicator);
         }
@@ -572,6 +591,7 @@ public class WheelView extends View {
                 }
                 canvas.restore();
                 paintCenterText.setTextSize(textSize);
+                paintOuterText.setTextSize(textOutSize);
             }
             counter++;
         }
@@ -613,7 +633,7 @@ public class WheelView extends View {
             width = rect.width();
         }
         //设置2条横线外面的文字大小
-        paintOuterText.setTextSize(size);
+        paintOuterText.setTextSize(textOutSize);
     }
 
 
@@ -695,7 +715,11 @@ public class WheelView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         this.widthMeasureSpec = widthMeasureSpec;
         reMeasure();
-        setMeasuredDimension(measuredWidth, measuredHeight);
+        if (dividerLength > 0){
+            setMeasuredDimension(dividerLength, measuredHeight);
+        }else {
+            setMeasuredDimension(measuredWidth, measuredHeight);
+        }
     }
 
     @Override
@@ -832,6 +856,10 @@ public class WheelView extends View {
         paintIndicator.setStrokeWidth(dividerWidth);
     }
 
+    public void setDividerLength(int dividerLength) {
+        this.dividerLength = (int) dp2px(dividerLength);
+    }
+
     public void setDividerColor(int dividerColor) {
         this.dividerColor = dividerColor;
         paintIndicator.setColor(dividerColor);
@@ -871,5 +899,9 @@ public class WheelView extends View {
     @Override
     public Handler getHandler() {
         return handler;
+    }
+
+    private float dp2px(float dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 }
